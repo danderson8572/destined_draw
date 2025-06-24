@@ -70,4 +70,6 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("com.squareup.moshi:moshi-adapters:1.15.0")
 }

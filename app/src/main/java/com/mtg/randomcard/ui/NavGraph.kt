@@ -8,6 +8,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mtg.randomcard.viewmodel.RandomCardViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.compose.animation.Crossfade
 
 object Route { const val Home = "home"; const val History = "history"; const val Detail = "detail"; const val Settings = "settings" }
 

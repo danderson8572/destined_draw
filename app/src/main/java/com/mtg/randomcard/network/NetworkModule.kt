@@ -3,7 +3,6 @@ package com.mtg.randomcard.network
 import com.mtg.randomcard.data.CardDto
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,21 +17,13 @@ interface ScryfallApi {
 }
 
 object NetworkModule {
-    private const val TIMEOUT = 20L // seconds
+    private val okHttp = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
+        .build()
 
-    private val okHttp by lazy {
-        OkHttpClient.Builder()
-            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
-            .build()
-    }
-
-    private val moshi by lazy {
-        Moshi.Builder()
-            .addLast(KotlinJsonAdapterFactory())
-            .build()
-    }
+    private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
     val api: ScryfallApi by lazy {
         Retrofit.Builder()

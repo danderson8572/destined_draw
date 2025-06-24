@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mtg.randomcard.data.CardDto
+import com.mtg.randomcard.ui.CardDisplay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

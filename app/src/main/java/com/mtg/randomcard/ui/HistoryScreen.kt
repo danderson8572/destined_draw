@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,21 +21,30 @@ import coil.compose.AsyncImage
 import com.mtg.randomcard.data.CardDto
 import com.mtg.randomcard.viewmodel.RandomCardViewModel
 
+private var backInProgress = false
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
 fun HistoryScreen(vm: RandomCardViewModel, onBack: () -> Unit, onOpen: (Int) -> Unit) {
     val ui = vm.state.collectAsState().value
-    val history = (ui as? UiState.Success)?.history ?: emptyList()
+    val history = vm.history.collectAsState().value
 
     Scaffold(topBar = {
-        TopAppBar(navigationIcon = {
-            IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, null) }
-        }, title = { Text("History") }, actions = {
+        TopAppBar(
+            navigationIcon = {
+                IconButton(onClick = {
+                    if (!backInProgress) {
+                        backInProgress = true       // set flag
+                        onBack()
+                    }
+                }) { Icon(Icons.Default.ArrowBack, null) }
+            }, title = { Text("History") }, actions = {
             IconButton(onClick = vm::clearHistory) { Icon(Icons.Default.Delete, "Clear") }
         })
     }) { pad ->
+        LaunchedEffect(Unit) { backInProgress = false }
         LazyColumn(Modifier.padding(pad)) {
             itemsIndexed(history, key = { _, c -> c.name }) { idx, card ->
                 AnimatedVisibility(visible = true, modifier = Modifier.animateItemPlacement(), label = "RowAnim") {
